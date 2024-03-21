@@ -35,8 +35,8 @@
             <li>
               <a
                 [routerLink]="'/' + item.value"
-                routerLinkActive="font-semibold"
-                class="block py-1 hover:underline"
+                routerLinkActive="font-semibold text-indigo"
+                class="block py-1 hover:font-semibold"
               >
                 {{ item.key | replace: '_' : ' ' | titlecase }}
               </a>
@@ -56,8 +56,8 @@
             <li>
               <a
                 [routerLink]="'/' + item.value"
-                routerLinkActive="font-semibold"
-                class="block px-8 py-2"
+                routerLinkActive="font-semibold text-indigo"
+                class="block px-8 py-2 hover:font-semibold"
                 (click)="sideNavOpened = false"
               >
                 {{ item.key | replace: '_' : ' ' | titlecase }}

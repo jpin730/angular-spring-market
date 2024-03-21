@@ -3,7 +3,7 @@
     @if (item.value !== path.HOME) {
       <li>
         <a
-          class="block w-full rounded border bg-white py-16 text-center shadow hover:underline hover:shadow-lg"
+          class="block w-full rounded border bg-white py-8 text-center shadow hover:font-semibold hover:text-indigo hover:shadow-lg"
           [routerLink]="'/' + item.value"
           >{{ item.key | replace: '_' : ' ' | titlecase }}</a
         >
@@ -13,7 +13,7 @@
 
   <li>
     <button
-      class="block w-full rounded border bg-white py-16 text-center shadow hover:underline hover:shadow-lg"
+      class="block w-full rounded border bg-white py-8 text-center text-red shadow hover:font-semibold hover:shadow-lg"
       (click)="resetData()"
     >
       Reset Data
