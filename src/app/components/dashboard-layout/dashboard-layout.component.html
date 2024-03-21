@@ -1,33 +1,81 @@
-<header class="border-b bg-white">
-  <div class="container mx-auto px-4 py-2">
-    <div class="flex items-center">
-      <a [routerLink]="'/' + path.HOME" class="flex gap-x-2">
-        <img
-          src="assets/angular_gradient.webp"
-          alt="Angular Icon"
-          height="28"
-          width="28"
-        />
-        <h1 class="text-xl">Spring Market</h1>
-      </a>
+<div class="flex min-h-dvh flex-col">
+  <header class="border-b bg-white">
+    <div class="container mx-auto px-4 py-2">
+      <div class="flex items-center">
+        <a
+          [routerLink]="'/' + path.HOME"
+          class="flex gap-x-2 font-extralight tracking-wide"
+        >
+          <img
+            src="assets/angular_gradient.webp"
+            alt="Angular Icon"
+            height="28"
+            width="28"
+          />
+          <h1 class="text-xl">Spring Market</h1>
+        </a>
 
-      <span class="flex-grow"></span>
+        <span class="flex-grow"></span>
 
-      <button class="flex rounded border p-1 text-xl sm:hidden">
-        <ng-icon class="" name="matMenuOutline" />
-      </button>
+        <button
+          class="flex rounded border p-1 text-xl lg:hidden"
+          (click)="sideNavOpened = !sideNavOpened"
+        >
+          <ng-icon class="" name="matMenuOutline" />
+        </button>
+      </div>
     </div>
+  </header>
+
+  <div class="container mx-auto flex flex-grow px-4">
+    <aside class="hidden w-full max-w-48 border-r py-8 lg:block">
+      <ul>
+        @for (item of path | keyvalue; track item.key) {
+          @if (item.value !== path.HOME) {
+            <li>
+              <a
+                [routerLink]="'/' + item.value"
+                routerLinkActive="font-semibold"
+                class="block py-1"
+              >
+                {{ item.key | replace: '_' : ' ' | titlecase }}
+              </a>
+            </li>
+          }
+        }
+      </ul>
+    </aside>
+
+    <aside
+      class="absolute left-0 top-0 z-10 flex w-dvw backdrop-blur-sm lg:hidden"
+      [ngClass]="{ hidden: !sideNavOpened }"
+    >
+      <ul class="h-dvh w-full max-w-48 border-r bg-white py-8">
+        @for (item of path | keyvalue; track item.key) {
+          @if (item.value !== path.HOME) {
+            <li>
+              <a
+                [routerLink]="'/' + item.value"
+                routerLinkActive="font-semibold"
+                class="block px-8 py-2"
+                (click)="sideNavOpened = false"
+              >
+                {{ item.key | replace: '_' : ' ' | titlecase }}
+              </a>
+            </li>
+          }
+        }
+      </ul>
+      <button
+        class="flex-grow text-transparent"
+        (click)="sideNavOpened = false"
+      >
+        close
+      </button>
+    </aside>
+
+    <main class="p-8">
+      <router-outlet />
+    </main>
   </div>
-</header>
-
-<aside>
-  <ul>
-    @for (item of path | keyvalue; track item.key) {
-      <li>
-        <a [routerLink]="'/' + item.value">{{ item.key }}</a>
-      </li>
-    }
-  </ul>
-</aside>
-
-<router-outlet />
+</div>
