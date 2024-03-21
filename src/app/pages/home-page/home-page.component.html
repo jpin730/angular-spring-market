@@ -1,8 +1,22 @@
-<p>home-page works!</p>
-<ul>
+<ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
   @for (item of path | keyvalue; track item.key) {
-    <li>
-      <a [routerLink]="'/' + item.value">{{ item.key }}</a>
-    </li>
+    @if (item.value !== path.HOME) {
+      <li>
+        <a
+          class="block w-full rounded border bg-white py-16 text-center shadow hover:underline hover:shadow-lg"
+          [routerLink]="'/' + item.value"
+          >{{ item.key | replace: '_' : ' ' | titlecase }}</a
+        >
+      </li>
+    }
   }
+
+  <li>
+    <button
+      class="block w-full rounded border bg-white py-16 text-center shadow hover:underline hover:shadow-lg"
+      (click)="resetData()"
+    >
+      Reset Data
+    </button>
+  </li>
 </ul>

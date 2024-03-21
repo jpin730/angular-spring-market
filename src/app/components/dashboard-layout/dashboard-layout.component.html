@@ -36,7 +36,7 @@
               <a
                 [routerLink]="'/' + item.value"
                 routerLinkActive="font-semibold"
-                class="block py-1"
+                class="block py-1 hover:underline"
               >
                 {{ item.key | replace: '_' : ' ' | titlecase }}
               </a>
@@ -74,7 +74,7 @@
       </button>
     </aside>
 
-    <main class="p-8">
+    <main class="flex-grow p-8">
       <router-outlet />
     </main>
   </div>
