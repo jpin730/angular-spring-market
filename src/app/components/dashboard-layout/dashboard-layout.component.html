@@ -1,2 +1,33 @@
-<p>dashboard-layout works!</p>
+<header class="border-b bg-white">
+  <div class="container mx-auto px-4 py-2">
+    <div class="flex items-center">
+      <a [routerLink]="'/' + path.HOME" class="flex gap-x-2">
+        <img
+          src="assets/angular_gradient.webp"
+          alt="Angular Icon"
+          height="28"
+          width="28"
+        />
+        <h1 class="text-xl">Spring Market</h1>
+      </a>
+
+      <span class="flex-grow"></span>
+
+      <button class="flex rounded border p-1 text-xl sm:hidden">
+        <ng-icon class="" name="matMenuOutline" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside>
+  <ul>
+    @for (item of path | keyvalue; track item.key) {
+      <li>
+        <a [routerLink]="'/' + item.value">{{ item.key }}</a>
+      </li>
+    }
+  </ul>
+</aside>
+
 <router-outlet />

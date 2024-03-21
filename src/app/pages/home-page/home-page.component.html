@@ -1,6 +1,6 @@
 <p>home-page works!</p>
 <ul>
-  @for (item of path | keyvalue; track item) {
+  @for (item of path | keyvalue; track item.key) {
     <li>
       <a [routerLink]="'/' + item.value">{{ item.key }}</a>
     </li>

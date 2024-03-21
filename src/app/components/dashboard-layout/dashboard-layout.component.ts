@@ -1,10 +1,17 @@
+import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
-import { RouterOutlet } from '@angular/router'
+import { RouterModule } from '@angular/router'
+import { NgIconComponent, provideIcons } from '@ng-icons/core'
+import { matMenuOutline } from '@ng-icons/material-icons/outline'
+import { PATH } from '../../constants/path.constant'
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [CommonModule, RouterModule, NgIconComponent],
   templateUrl: './dashboard-layout.component.html',
+  viewProviders: [provideIcons({ matMenuOutline })],
 })
-export class DashboardLayoutComponent {}
+export class DashboardLayoutComponent {
+  path = PATH
+}
