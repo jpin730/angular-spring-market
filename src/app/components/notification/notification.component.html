@@ -1,0 +1,14 @@
+@if (show()) {
+  <div class="absolute bottom-0 left-0 z-20 w-dvw px-4">
+    <div
+      class="mx-auto mb-4 flex w-full max-w-sm items-start justify-between gap-x-2 rounded border bg-white p-4 text-gray-dark shadow hover:shadow-lg"
+    >
+      <p class="text-sm">
+        {{ message() }}
+      </p>
+      <button (click)="close()">
+        <ng-icon name="matCloseOutline" />
+      </button>
+    </div>
+  </div>
+}
