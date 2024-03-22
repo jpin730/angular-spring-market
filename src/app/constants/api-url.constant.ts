@@ -1,1 +1,3 @@
-export const API_URL = 'https://java-spring-market.onrender.com/api'
+import { environment } from '../../environments/environment'
+
+export const API_URL = environment.apiUrl
