@@ -1,1 +1,86 @@
-<p>customers-page works!</p>
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-xl">Customers</h2>
+
+  <button
+    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50 disabled:opacity-50"
+    [disabled]="editing"
+    (click)="create()"
+  >
+    Add new
+  </button>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <tr class="py-2 text-left">
+      <th class="whitespace-nowrap p-2">Id</th>
+      <th class="whitespace-nowrap p-2">Name</th>
+      <th class="whitespace-nowrap p-2 text-right">Actions</th>
+    </tr>
+    @for (customer of customers(); track customer.id; let even = $even) {
+      <tr class="hover:bg-gray-100" [class.bg-gray-50]="even">
+        <td class="whitespace-nowrap p-2">{{ customer.id }}</td>
+        <td class="whitespace-nowrap p-2">
+          @if (editing && editing.id === customer.id) {
+            <input
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.name"
+            />
+          } @else {
+            {{ customer.name }}
+          }
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            @if (editing?.id === customer.id) {
+              <button class="hover:underline" (click)="cancel()">Cancel</button>
+              <button class="text-indigo hover:underline" (click)="save()">
+                Save
+              </button>
+            } @else {
+              <button
+                class="hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                (click)="edit(customer)"
+                [disabled]="editing && editing.id !== customer.id"
+              >
+                Edit
+              </button>
+              <button
+                class="text-red hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                [disabled]="editing && editing.id !== customer.id"
+                (click)="delete(customer.id)"
+              >
+                Delete
+              </button>
+            }
+          </span>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="3" class="bg-gray-50 p-2 text-center">
+          No customers found
+        </td>
+      </tr>
+    }
+    @if (editing && editing.id === 0) {
+      <tr class="hover:bg-gray-100">
+        <td class="whitespace-nowrap p-2">-</td>
+        <td class="whitespace-nowrap p-2">
+          <input
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.name"
+          />
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            <button class="hover:underline" (click)="cancel()">Cancel</button>
+            <button class="text-indigo hover:underline" (click)="save()">
+              Save
+            </button>
+          </span>
+        </td>
+      </tr>
+    }
+  </table>
+</div>
