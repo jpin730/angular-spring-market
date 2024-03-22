@@ -22,7 +22,15 @@ export class CategoriesService {
       .pipe(tap((res) => this._categories.set(res)))
   }
 
-  updateCategory(category: Category): Observable<Category> {
-    return this.http.put<Category>(`${this.baseUrl}/categories`, category)
+  createCategory(category: Pick<Category, 'name'>): Observable<Category> {
+    return this.http.post<Category>(`${this.baseUrl}/categories`, category)
+  }
+
+  updateCategory(category: Category): Observable<null> {
+    return this.http.put<null>(`${this.baseUrl}/categories`, category)
+  }
+
+  deleteCategory(id: number): Observable<null> {
+    return this.http.delete<null>(`${this.baseUrl}/categories/${id}`)
   }
 }

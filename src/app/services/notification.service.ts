@@ -11,6 +11,7 @@ export class NotificationService {
   notification = computed(() => this._notification())
 
   show(message: string): void {
+    this.close()
     this._notification.set(message)
     clearTimeout(this._timeoutId)
     this._timeoutId = setTimeout(

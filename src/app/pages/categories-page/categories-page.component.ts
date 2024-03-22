@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { switchMap, tap } from 'rxjs'
+import { Observable, switchMap, tap } from 'rxjs'
 import { Category } from '../../interfaces/category.interface'
 import { CategoriesService } from '../../services/categories.service'
 
@@ -20,16 +20,29 @@ export default class CategoriesPageComponent implements OnInit {
     this.categoriesService.getAllCategories().subscribe()
   }
 
+  create(): void {
+    this.editing = { name: '', id: 0 }
+  }
+
   edit(category: Category): void {
     this.editing = structuredClone(category)
+  }
+
+  cancel(): void {
+    this.editing = null
   }
 
   save(): void {
     if (!this.editing) {
       return
     }
-    this.categoriesService
-      .updateCategory(this.editing)
+
+    const request: Observable<unknown> =
+      this.editing.id === 0
+        ? this.categoriesService.createCategory(this.editing)
+        : this.categoriesService.updateCategory(this.editing)
+
+    request
       .pipe(
         tap(() => (this.editing = null)),
         switchMap(() => this.categoriesService.getAllCategories()),
@@ -37,7 +50,10 @@ export default class CategoriesPageComponent implements OnInit {
       .subscribe()
   }
 
-  cancel(): void {
-    this.editing = null
+  delete(id: number): void {
+    this.categoriesService
+      .deleteCategory(id)
+      .pipe(switchMap(() => this.categoriesService.getAllCategories()))
+      .subscribe()
   }
 }

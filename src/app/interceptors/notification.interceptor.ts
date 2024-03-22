@@ -13,7 +13,6 @@ const defaultSuccessfulMethods = ['POST', 'PUT', 'DELETE']
 
 export const notificationInterceptor: HttpInterceptorFn = (req, next) => {
   const notification = inject(NotificationService)
-  notification.close()
 
   const showSuccess = req.context.get(SHOW_SUCCESS)
 
