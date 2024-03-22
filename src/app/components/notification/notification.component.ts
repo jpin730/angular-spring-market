@@ -1,14 +1,12 @@
 import { Component, computed, inject } from '@angular/core'
-import { NgIconComponent, provideIcons } from '@ng-icons/core'
-import { matCloseOutline } from '@ng-icons/material-icons/outline'
 import { NotificationService } from '../../services/notification.service'
+import { CloseSvgComponent } from '../../svgs/close-svg/close-svg.component'
 
 @Component({
   selector: 'app-notification',
   standalone: true,
-  imports: [NgIconComponent],
+  imports: [CloseSvgComponent],
   templateUrl: './notification.component.html',
-  viewProviders: [provideIcons({ matCloseOutline })],
 })
 export class NotificationComponent {
   private readonly notification = inject(NotificationService)
