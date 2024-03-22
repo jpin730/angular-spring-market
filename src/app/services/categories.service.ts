@@ -21,4 +21,8 @@ export class CategoriesService {
       .get<Category[]>(`${this.baseUrl}/categories`)
       .pipe(tap((res) => this._categories.set(res)))
   }
+
+  updateCategory(category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.baseUrl}/categories`, category)
+  }
 }

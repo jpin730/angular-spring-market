@@ -2,7 +2,8 @@
   <h2 class="text-xl">Categories</h2>
 
   <button
-    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50"
+    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50 disabled:opacity-50"
+    [disabled]="editing"
   >
     Add new
   </button>
@@ -18,10 +19,39 @@
     @for (category of categories(); track category.id; let even = $even) {
       <tr class="hover:bg-gray-100" [class.bg-gray-50]="even">
         <td class="whitespace-nowrap p-2">{{ category.id }}</td>
-        <td class="whitespace-nowrap p-2">{{ category.name }}</td>
-        <td class="flex items-center justify-end gap-2 whitespace-nowrap p-2">
-          <button class="hover:underline">Edit</button>
-          <button class="text-red hover:underline">Delete</button>
+        <td class="whitespace-nowrap p-2">
+          @if (editing && editing.id === category.id) {
+            <input
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.name"
+            />
+          } @else {
+            {{ category.name }}
+          }
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            @if (editing?.id === category.id) {
+              <button class="hover:underline" (click)="cancel()">Cancel</button>
+              <button class="text-indigo hover:underline" (click)="save()">
+                Save
+              </button>
+            } @else {
+              <button
+                class="hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                (click)="edit(category)"
+                [disabled]="editing && editing.id !== category.id"
+              >
+                Edit
+              </button>
+              <button
+                class="text-red hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                [disabled]="editing && editing.id !== category.id"
+              >
+                Delete
+              </button>
+            }
+          </span>
         </td>
       </tr>
     } @empty {
