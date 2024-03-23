@@ -15,3 +15,13 @@ To build the app, use the following command:
 ```bash
 npm run build
 ```
+
+## Deployment
+
+<https://angular-spring-market.vercel.app>
+
+Backend:
+
+<https://java-spring-market.onrender.com/api>
+
+<https://github.com/jpin730/java-spring-market>
