@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, computed, inject, signal } from '@angular/core'
 import { Observable, tap } from 'rxjs'
 import { API_URL } from '../constants/api-url.constant'
@@ -16,9 +16,13 @@ export class ProductsService {
 
   private readonly baseUrl = API_URL
 
-  getAllProducts(): Observable<Product[]> {
+  getAllProducts(category?: number): Observable<Product[]> {
+    const params =
+      category == null
+        ? undefined
+        : new HttpParams().set('category', category.toString())
     return this.http
-      .get<Product[]>(`${this.baseUrl}/products`)
+      .get<Product[]>(`${this.baseUrl}/products`, { params })
       .pipe(tap((res) => this._products.set(res)))
   }
 

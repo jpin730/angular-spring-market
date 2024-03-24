@@ -6,6 +6,10 @@ import { Product, ProductDto } from '../../interfaces/product.interface'
 import { CategoriesService } from '../../services/categories.service'
 import { ProductsService } from '../../services/products.service'
 
+interface Filter {
+  category?: number
+}
+
 @Component({
   selector: 'app-products-page',
   standalone: true,
@@ -19,25 +23,26 @@ export default class ProductsPageComponent implements OnInit {
   products = this.productsService.products
   categories = this.categoriesService.categories
   editing: ProductDto | null = null
+  filter: Filter = {}
 
   ngOnInit(): void {
     this.productsService.getAllProducts().subscribe()
+    this.categoriesService.getAllCategories().subscribe()
   }
 
   create(): void {
     this.editing = { name: '', price: 0 }
-    this.categoriesService.getAllCategories().subscribe(() =>
+    setTimeout(() => {
       window.scrollTo({
         top: document.body.scrollHeight,
         behavior: 'smooth',
-      }),
-    )
+      })
+    })
   }
 
   edit(product: Product): void {
     const { category, ...rest } = product
     this.editing = { ...rest, categoryId: category.id }
-    this.categoriesService.getAllCategories().subscribe()
   }
 
   cancel(): void {
@@ -66,5 +71,9 @@ export default class ProductsPageComponent implements OnInit {
       .deleteProduct(id)
       .pipe(switchMap(() => this.productsService.getAllProducts()))
       .subscribe()
+  }
+
+  filterChanged(): void {
+    this.productsService.getAllProducts(this.filter.category).subscribe()
   }
 }

@@ -10,6 +10,21 @@
   </button>
 </div>
 
+<div class="mb-4 flex w-full items-center gap-x-2 text-sm sm:w-1/2">
+  <label for="category-filter">Filter by category:</label>
+  <select
+    id="category-filter"
+    class="flex-grow cursor-pointer rounded border p-1"
+    [(ngModel)]="filter.category"
+    (change)="filterChanged()"
+  >
+    <option [ngValue]="undefined">All</option>
+    @for (category of categories(); track category.id) {
+      <option [ngValue]="category.id">{{ category.name }}</option>
+    }
+  </select>
+</div>
+
 <div class="overflow-x-auto">
   <table class="w-full text-sm">
     <tr class="py-2 text-left">
