@@ -22,6 +22,12 @@ export default class CategoriesPageComponent implements OnInit {
 
   create(): void {
     this.editing = { name: '', id: 0 }
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      })
+    })
   }
 
   edit(category: Category): void {
