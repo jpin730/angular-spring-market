@@ -1,1 +1,127 @@
-<p>products-page works!</p>
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-xl">Products</h2>
+
+  <button
+    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50 disabled:opacity-50"
+    [disabled]="editing"
+    (click)="create()"
+  >
+    Add new
+  </button>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <tr class="py-2 text-left">
+      <th class="whitespace-nowrap p-2">Id</th>
+      <th class="whitespace-nowrap p-2">Name</th>
+      <th class="whitespace-nowrap p-2">Price</th>
+      <th class="whitespace-nowrap p-2">Category</th>
+      <th class="whitespace-nowrap p-2 text-right">Actions</th>
+    </tr>
+    @for (product of products(); track product.id; let even = $even) {
+      <tr class="hover:bg-gray-100" [class.bg-gray-50]="even">
+        <td class="whitespace-nowrap p-2">{{ product.id }}</td>
+        @if (editing && editing.id === product.id) {
+          <td class="whitespace-nowrap p-2">
+            <input
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.name"
+            />
+          </td>
+          <td class="whitespace-nowrap p-2">
+            <input
+              type="number"
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.price"
+            />
+          </td>
+          <td class="whitespace-nowrap p-2">
+            <select
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.categoryId"
+            >
+              @for (category of categories(); track category.id) {
+                <option [ngValue]="category.id">{{ category.name }}</option>
+              }
+            </select>
+          </td>
+        } @else {
+          <td class="whitespace-nowrap p-2">{{ product.name }}</td>
+          <td class="whitespace-nowrap p-2 text-right">
+            {{ product.price | currency }}
+          </td>
+          <td class="whitespace-nowrap p-2">{{ product.category.name }}</td>
+        }
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            @if (editing?.id === product.id) {
+              <button class="hover:underline" (click)="cancel()">Cancel</button>
+              <button class="text-indigo hover:underline" (click)="save()">
+                Save
+              </button>
+            } @else {
+              <button
+                class="hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                (click)="edit(product)"
+                [disabled]="editing && editing.id !== product.id"
+              >
+                Edit
+              </button>
+              <button
+                class="text-red hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                [disabled]="editing && editing.id !== product.id"
+                (click)="delete(product.id)"
+              >
+                Delete
+              </button>
+            }
+          </span>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="5" class="bg-gray-50 p-2 text-center">
+          No products found
+        </td>
+      </tr>
+    }
+    @if (editing && !editing.id) {
+      <tr class="hover:bg-gray-100">
+        <td class="whitespace-nowrap p-2">-</td>
+        <td class="whitespace-nowrap p-2">
+          <input
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.name"
+          />
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <input
+            type="number"
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.price"
+          />
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <select
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.categoryId"
+          >
+            <option [ngValue]="undefined">Select category</option>
+            @for (category of categories(); track category.id) {
+              <option [ngValue]="category.id">{{ category.name }}</option>
+            }
+          </select>
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            <button class="hover:underline" (click)="cancel()">Cancel</button>
+            <button class="text-indigo hover:underline" (click)="save()">
+              Save
+            </button>
+          </span>
+        </td>
+      </tr>
+    }
+  </table>
+</div>
