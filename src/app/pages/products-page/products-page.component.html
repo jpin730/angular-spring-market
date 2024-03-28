@@ -16,6 +16,7 @@
     id="category-filter"
     class="flex-grow cursor-pointer rounded border p-1"
     [(ngModel)]="filter.category"
+    [disabled]="!!editing"
     (change)="filterChanged()"
   >
     <option [ngValue]="undefined">All</option>

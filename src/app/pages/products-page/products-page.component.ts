@@ -61,7 +61,9 @@ export default class ProductsPageComponent implements OnInit {
     request
       .pipe(
         tap(() => (this.editing = null)),
-        switchMap(() => this.productsService.getAllProducts()),
+        switchMap(() =>
+          this.productsService.getAllProducts(this.filter.category),
+        ),
       )
       .subscribe()
   }
@@ -69,7 +71,11 @@ export default class ProductsPageComponent implements OnInit {
   delete(id: number): void {
     this.productsService
       .deleteProduct(id)
-      .pipe(switchMap(() => this.productsService.getAllProducts()))
+      .pipe(
+        switchMap(() =>
+          this.productsService.getAllProducts(this.filter.category),
+        ),
+      )
       .subscribe()
   }
 
