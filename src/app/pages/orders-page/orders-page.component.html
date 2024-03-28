@@ -1,1 +1,125 @@
-<p>orders-page works!</p>
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-xl">Orders</h2>
+
+  <button
+    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50 disabled:opacity-50"
+    [disabled]="editing"
+    (click)="create()"
+  >
+    Add new
+  </button>
+</div>
+
+<div class="mb-4 flex w-full items-center gap-x-2 text-sm sm:w-1/2">
+  <label for="customer-filter">Filter by customer:</label>
+  <select
+    id="customer-filter"
+    class="flex-grow cursor-pointer rounded border p-1"
+    [(ngModel)]="filter.customer"
+    [disabled]="!!editing"
+    (change)="filterChanged()"
+  >
+    <option [ngValue]="undefined">All</option>
+    @for (customer of customers(); track customer.id) {
+      <option [ngValue]="customer.id">{{ customer.name }}</option>
+    }
+  </select>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <tr class="py-2 text-left">
+      <th class="whitespace-nowrap p-2">Id</th>
+      <th class="whitespace-nowrap p-2">Customer</th>
+      <th class="whitespace-nowrap p-2">Total</th>
+      <th class="whitespace-nowrap p-2">Paid</th>
+      <th class="whitespace-nowrap p-2 text-right">Actions</th>
+    </tr>
+    @for (order of orders(); track order.id; let even = $even) {
+      <tr class="hover:bg-gray-100" [class.bg-gray-50]="even">
+        <td class="whitespace-nowrap p-2">{{ order.id }}</td>
+        <td class="whitespace-nowrap p-2">
+          {{ order.customer.name }}
+        </td>
+
+        <td class="whitespace-nowrap p-2">
+          {{ order.total | currency }}
+        </td>
+        @if (editing && editing.id === order.id) {
+          <td class="whitespace-nowrap p-2">
+            <select
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.paid"
+            >
+              <option [ngValue]="false">No</option>
+              <option [ngValue]="true">Yes</option>
+            </select>
+          </td>
+        } @else {
+          <td class="whitespace-nowrap p-2">
+            {{ order.paid ? 'Yes' : 'No' }}
+          </td>
+        }
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            @if (editing?.id === order.id) {
+              <button class="hover:underline" (click)="cancel()">Cancel</button>
+              <button class="text-indigo hover:underline" (click)="save()">
+                Save
+              </button>
+            } @else {
+              <button
+                class="hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                (click)="edit(order)"
+                [disabled]="editing && editing.id !== order.id"
+              >
+                Edit
+              </button>
+              <button
+                class="text-red hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                [disabled]="editing && editing.id !== order.id"
+                (click)="delete(order.id)"
+              >
+                Delete
+              </button>
+            }
+          </span>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="5" class="bg-gray-50 p-2 text-center">No orders found</td>
+      </tr>
+    }
+    @if (editing && !editing.id) {
+      <tr class="hover:bg-gray-100">
+        <td class="whitespace-nowrap p-2">-</td>
+        <td class="whitespace-nowrap p-2">
+          <select
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.customerId"
+          >
+            <option [ngValue]="undefined">Select customer</option>
+            @for (customer of customers(); track customer.id) {
+              <option [ngValue]="customer.id">{{ customer.name }}</option>
+            }
+          </select>
+        </td>
+        <td class="whitespace-nowrap p-2">
+          {{ 0 | currency }}
+        </td>
+        <td class="whitespace-nowrap p-2">
+          {{ 'No' }}
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            <button class="hover:underline" (click)="cancel()">Cancel</button>
+            <button class="text-indigo hover:underline" (click)="save()">
+              Save
+            </button>
+          </span>
+        </td>
+      </tr>
+    }
+  </table>
+</div>
