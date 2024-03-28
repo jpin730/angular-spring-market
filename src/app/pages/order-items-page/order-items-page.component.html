@@ -1,1 +1,163 @@
-<p>order-items-page works!</p>
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-xl">Order Items</h2>
+
+  <button
+    class="rounded border border-indigo px-4 py-1 text-sm text-indigo hover:bg-gray-50 disabled:opacity-50"
+    [disabled]="editing"
+    (click)="create()"
+  >
+    Add new
+  </button>
+</div>
+
+<div class="mb-4 flex w-full items-center gap-x-2 text-sm sm:w-1/2">
+  <label for="category-filter">Filter by order:</label>
+  <select
+    id="category-filter"
+    class="flex-grow cursor-pointer rounded border p-1"
+    [(ngModel)]="filter.order"
+    [disabled]="!!editing"
+    (change)="filterChanged()"
+  >
+    <option [ngValue]="undefined">All</option>
+    @for (order of orders(); track order.id) {
+      <option [ngValue]="order.id">
+        {{ order.id }} - {{ order.customer.name }}
+      </option>
+    }
+  </select>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <tr class="py-2 text-left">
+      <th class="whitespace-nowrap p-2">Order</th>
+      <th class="whitespace-nowrap p-2">Product</th>
+      <th class="whitespace-nowrap p-2">Quantity</th>
+      <th class="whitespace-nowrap p-2">Price</th>
+      <th class="whitespace-nowrap p-2">Total</th>
+      <th class="whitespace-nowrap p-2 text-right">Actions</th>
+    </tr>
+    @for (item of items(); track $index; let even = $even) {
+      <tr class="hover:bg-gray-100" [class.bg-gray-50]="even">
+        <td class="whitespace-nowrap p-2">{{ item.purchaseId }}</td>
+        <td class="whitespace-nowrap p-2">{{ item.product.name }}</td>
+        @if (
+          editing &&
+          !isNew &&
+          editing.purchaseId === item.purchaseId &&
+          editing.productId === item.product.id
+        ) {
+          <td class="whitespace-nowrap p-2">
+            <input
+              type="number"
+              class="w-full rounded border px-1"
+              [(ngModel)]="editing.quantity"
+            />
+          </td>
+        } @else {
+          <td class="whitespace-nowrap p-2">{{ item.quantity }}</td>
+        }
+        <td class="whitespace-nowrap p-2 text-right">
+          {{ item.product.price | currency }}
+        </td>
+        <td class="whitespace-nowrap p-2 text-right">
+          {{ item.total | currency }}
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            @if (
+              editing &&
+              !isNew &&
+              editing.purchaseId === item.purchaseId &&
+              editing.productId === item.product.id
+            ) {
+              <button class="hover:underline" (click)="cancel()">Cancel</button>
+              <button class="text-indigo hover:underline" (click)="save()">
+                Save
+              </button>
+            } @else {
+              <button
+                class="hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                (click)="edit(item)"
+                [disabled]="
+                  editing &&
+                  !isNew &&
+                  (editing.purchaseId !== item.purchaseId ||
+                    editing.productId !== item.product.id)
+                "
+              >
+                Edit
+              </button>
+              <button
+                class="text-red hover:underline disabled:opacity-50 disabled:hover:no-underline"
+                [disabled]="
+                  editing &&
+                  !isNew &&
+                  (editing.purchaseId !== item.purchaseId ||
+                    editing.productId !== item.product.id)
+                "
+                (click)="delete(item.purchaseId, item.product.id)"
+              >
+                Delete
+              </button>
+            }
+          </span>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="6" class="bg-gray-50 p-2 text-center">No items found</td>
+      </tr>
+    }
+    @if (editing && isNew) {
+      <tr class="hover:bg-gray-100">
+        <td class="whitespace-nowrap p-2">
+          <select
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.purchaseId"
+          >
+            <option [ngValue]="undefined">Select order</option>
+            @for (order of orders(); track $index) {
+              <option [ngValue]="order.id">
+                {{ order.id }} - {{ order.customer.name }}
+              </option>
+            }
+          </select>
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <select
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.productId"
+          >
+            <option [ngValue]="undefined">Select product</option>
+            @for (product of products(); track $index) {
+              <option [ngValue]="product.id">{{ product.name }}</option>
+            }
+          </select>
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <input
+            type="number"
+            class="w-full rounded border px-1"
+            [(ngModel)]="editing.quantity"
+          />
+        </td>
+        <td class="whitespace-nowrap p-2 text-right">
+          {{ 0 | currency }}
+        </td>
+        <td class="whitespace-nowrap p-2 text-right">
+          {{ 0 | currency }}
+        </td>
+        <td class="whitespace-nowrap p-2">
+          <span class="flex items-center justify-end gap-2">
+            <button class="hover:underline" (click)="cancel()">Cancel</button>
+            <button class="text-indigo hover:underline" (click)="save()">
+              Save
+            </button>
+          </span>
+        </td>
+      </tr>
+    }
+  </table>
+</div>
