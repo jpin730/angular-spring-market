@@ -16,12 +16,6 @@ To build the app, use the following command:
 npm run build
 ```
 
-## Deployment
-
-<https://angular-spring-market.vercel.app>
-
-Backend:
-
-<https://java-spring-market.onrender.com/api>
+## Backend Repository
 
 <https://github.com/jpin730/java-spring-market>
